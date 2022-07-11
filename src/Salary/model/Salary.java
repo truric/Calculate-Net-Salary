@@ -171,7 +171,7 @@ public class Salary {
                 valid = false;
             }
 
-        } while (dep <= 0 || !valid || dep > 5);
+        } while (dep < 0 || !valid || dep > 5);
         return dep;
     }
 
@@ -262,6 +262,8 @@ public class Salary {
 
     public Double calculateWithholdingTax(martialStatus martialStatus, Integer dependants, Double baseSalary) throws IOException {
         String filePath = System.getProperty("user.dir");
+//        XSSFWorkbook workbook = new XSSFWorkbook(filePath + "\\docs\\test.xlsx");
+        // artifact will look into jar file path folder
         XSSFWorkbook workbook = new XSSFWorkbook(filePath + "\\docs\\test.xlsx");
         int sheetNumber = getMartialStatusEnumInput(martialStatus);
         XSSFSheet sheet = workbook.getSheetAt(sheetNumber);
