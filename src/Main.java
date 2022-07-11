@@ -1,45 +1,56 @@
 import Salary.model.Salary;
 import Salary.model.martialStatus;
 
-import java.util.Scanner;
+import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Salary salary = new Salary();
 
-        Scanner scan = new Scanner(System.in);
-        System.out.print("Martial Status: \n[1] -- Single\n[2] -- Married\n");
-        int ms = scan.nextInt();
-        System.out.print("Number of dependents: ");
-        int dep = scan.nextInt();
-        System.out.print("Base Salary: ");
-        double bs = scan.nextDouble();
-        System.out.print("Food allowance: ");
-        double fa = scan.nextDouble();
-        System.out.print("Food allowance payed in CARD?\n[1] -- yes\n[2] -- no\n");
-        int card = scan.nextInt();
+        int ms = salary.martialStatusMenu();
+        int dep = salary.dependantsMenu();
+        double bs = salary.baseSalaryMenu();
+        double fa = salary.foodAllowanceMenu();
+        int card = salary.foodAllowanceCardMenu();
+
         boolean cardAnswer;
+        // card = 1 ? cardAnswer = true : cardAnswer = false
         cardAnswer = card == 1;
-        System.out.print("Allowances: ");
-        double al = scan.nextDouble();
-        System.out.print("Monthly working days: ");
-        int wd = scan.nextInt();
-        Double tax;
-        if (ms == 1) {
-            tax = salary.calculateWithholdingTax(martialStatus.SINGLE, dep, bs);
 
-        }else {
-            tax = salary.calculateWithholdingTax(martialStatus.MARRIED, dep, bs);
-        }
+        double al = salary.allowancesMenu();
+        int mwd = salary.monthlyWorkingDaysMenu();
 
-        Double GrossSalary = salary.calculateGrossSalary(bs,fa,cardAnswer, al, wd);
+        Double tax = salary.calculateWithholdingTax(getMartialStatusIntInput(ms), dep, bs);
+        Double GrossSalary = salary.calculateGrossSalary(bs,fa,cardAnswer, al, mwd);
+        Double NetSalary = GrossSalary - ((tax * 0.01) * GrossSalary);
 
-        System.out.println("\n");
         System.out.println("tax: " + tax + "%");
-
         System.out.format("Gross salary %.2f", GrossSalary);
-        double NetSalary = GrossSalary - ((tax * 0.01) * GrossSalary);
         System.out.format("\nNet salary: %.2f", NetSalary);
 
+    }
+
+    // receives input integer and outputs Enum martialStatus, so it navigates to the correct sheet index
+    public static martialStatus getMartialStatusIntInput(int x) {
+        // default = 0 = SINGLE
+        martialStatus msResult = martialStatus.SINGLE;
+        switch(x){
+            case 1:
+                msResult = martialStatus.MARRIED_ONE_IS_WORKING;
+                break;
+            case 2:
+                msResult = martialStatus.MARRIED;
+                break;
+            case 3:
+                msResult = martialStatus.SINGLE_WITH_DEFICIENCY;
+                break;
+            case 4:
+                msResult = martialStatus.MARRIED_ONE_IS_WORKING_WITH_DEFICIENCY;
+                break;
+            case 5:
+                msResult = martialStatus.MARRIED_BOTH_WITH_DEFICIENCY;
+                break;
+        }
+        return msResult;
     }
 }
