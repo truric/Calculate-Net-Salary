@@ -8,103 +8,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Salary {
-    private Enum martialStatus;
-    private Enum residence;
-    private Integer dependants;
-    private Double baseSalary;
-    private Double foodAllowance;
-    private Boolean foodAllowanceAsCard;
-    private Double allowances;
+
+    public static double MINIMUM_LEGAL_FOOD_ALLOWANCE = 4.77;
+    public static double MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD = 7.63;
 
     public Salary() {
-    }
-
-    public void setBaseSalary(Double baseSalary) {
-        this.baseSalary = baseSalary;
-    }
-
-    private Integer monthlyWorkingDays;
-
-    public Salary(Enum martialStatus, Enum residence,
-                  Integer dependants, Double baseSalary,
-                  Double foodAllowance, Boolean foodAllowanceAsCard,
-                  Double allowances, Integer monthlyWorkingDays) {
-        this.martialStatus = martialStatus;
-        this.residence = residence;
-        this.dependants = dependants;
-        this.baseSalary = baseSalary;
-        this.foodAllowance = foodAllowance;
-        this.foodAllowanceAsCard = foodAllowanceAsCard;
-        this.allowances = allowances;
-        this.monthlyWorkingDays = monthlyWorkingDays;
-    }
-
-    public Enum getMartialStatus() {
-        return martialStatus;
-    }
-
-    public void setMartialStatus(Enum martialStatus) {
-        this.martialStatus = martialStatus;
-    }
-
-    public Enum getResidence() {
-        return residence;
-    }
-
-    public void setResidence(Enum residence) {
-        this.residence = residence;
-    }
-
-    public Integer getDependants() {
-        return dependants;
-    }
-
-    public void setDependants(Integer dependants) {
-        this.dependants = dependants;
-    }
-
-    public Double getBaseSalary() {
-        return baseSalary;
-    }
-
-    public void getBaseSalary(Double baseSalary) {
-        this.baseSalary = baseSalary;
-    }
-
-    public Double getFoodAllowance() {
-        return foodAllowance;
-    }
-
-    public void setFoodAllowance(Double foodAllowance) {
-        this.foodAllowance = foodAllowance;
-    }
-
-    public Boolean getFoodAllowanceAsCard() {
-        return foodAllowanceAsCard;
-    }
-
-    public void setFoodAllowanceAsCard(Boolean foodAllowanceAsCard) {
-        this.foodAllowanceAsCard = foodAllowanceAsCard;
-    }
-
-    public Double getAllowances() {
-        return allowances;
-    }
-
-    public void setAllowances(Double allowances) {
-        this.allowances = allowances;
-    }
-
-    public Integer getMonthlyWorkingDays() {
-        return monthlyWorkingDays;
-    }
-
-    public void setMonthlyWorkingDays(Integer monthlyWorkingDays) {
-        this.monthlyWorkingDays = monthlyWorkingDays;
-    }
-
-    public void martialStatus(martialStatus martialStatus) {
-
     }
 
     // receives Enum martialStatus input and outputs integer number of sheet, default = 0 = SINGLE
@@ -199,7 +107,8 @@ public class Salary {
         do {
             valid = true;
             try {
-                System.out.print("Food allowance (insert min and max range here): \n");
+//                System.out.print("Food allowance (insert min and max range here): \n");
+                System.out.print("Food allowance: ");
                 fa = Double.parseDouble(scan.next());
             } catch (Exception e) {
                 System.out.println("Invalid value " + e.getMessage().toLowerCase());
@@ -216,7 +125,7 @@ public class Salary {
         do {
             valid = true;
             try {
-                System.out.print("Food allowance payed in CARD?\n[1] -- yes\n[2] -- no\n");
+                System.out.print("Food allowance payed in CARD?\n[1] -- yes\n[2] -- no\n--> ");
                 card = Integer.parseInt(scan.next());
             } catch (Exception e) {
                 System.out.println("Invalid value " + e.getMessage().toLowerCase());
@@ -233,7 +142,8 @@ public class Salary {
         do {
             valid = true;
             try {
-                System.out.print("Allowances: (add range if exists, cant it be 0?): \n");
+//                System.out.print("Allowances: (add range if exists, cant it be 0?): \n");
+                System.out.print("Allowances: ");
                 al = Double.parseDouble(scan.next());
             } catch (Exception e) {
                 System.out.println("Invalid value " + e.getMessage().toLowerCase());
@@ -250,7 +160,8 @@ public class Salary {
         do {
             valid = true;
             try {
-                System.out.print("Monthly working days: (range maybe max 22?)\n");
+//                System.out.print("Monthly working days: (range maybe max 22?)\n");
+                System.out.print("Monthly working days: ");
                 mwd = Integer.parseInt(scan.next());
             } catch (Exception e) {
                 System.out.println("Invalid value " + e.getMessage().toLowerCase());
@@ -262,8 +173,7 @@ public class Salary {
 
     public Double calculateWithholdingTax(martialStatus martialStatus, Integer dependants, Double baseSalary) throws IOException {
         String filePath = System.getProperty("user.dir");
-//        XSSFWorkbook workbook = new XSSFWorkbook(filePath + "\\docs\\test.xlsx");
-        // artifact will look into jar file path folder
+        // if jar file is created, artifact will look into jar file path folder, change .xlsx file path here
         XSSFWorkbook workbook = new XSSFWorkbook(filePath + "\\docs\\test.xlsx");
         int sheetNumber = getMartialStatusEnumInput(martialStatus);
         XSSFSheet sheet = workbook.getSheetAt(sheetNumber);
@@ -281,6 +191,8 @@ public class Salary {
 
         for (i = 0; i < baseSalaryData.size()-1; i++) {
             if (baseSalary <= baseSalaryData.get(i)) {
+//                every i row has 6 possible values
+//                this way there's no need for nested loops
                 return taxData.get(i*6+dependants);
             }
             else if (baseSalary >= baseSalaryData.get(baseSalaryData.size()-1)) {
@@ -291,27 +203,14 @@ public class Salary {
     }
 
     public Double calculateGrossSalary(Double baseSalary, Double foodAllowance, Boolean foodAllowanceAsCard, Double allowances, Integer monthlyWorkingDays) {
-        double total;
-        if (foodAllowance < 4.77 || foodAllowanceAsCard) {
-            total = baseSalary + (foodAllowance * monthlyWorkingDays);
-            total = total - (baseSalary * 0.11) + allowances;
-        }else{
-            total = baseSalary - (foodAllowance * monthlyWorkingDays) - (baseSalary * 0.11) + allowances;
+        double total = 0;
+        if (foodAllowance < MINIMUM_LEGAL_FOOD_ALLOWANCE) {
+            total = baseSalary + (foodAllowance * monthlyWorkingDays) + allowances;
+        }else if (foodAllowanceAsCard && foodAllowance > MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD) {
+            total = baseSalary + (foodAllowance - MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD) * monthlyWorkingDays + allowances;
+        }else if (!foodAllowanceAsCard && foodAllowance > MINIMUM_LEGAL_FOOD_ALLOWANCE) {
+            total = baseSalary + (foodAllowance - MINIMUM_LEGAL_FOOD_ALLOWANCE) * monthlyWorkingDays + allowances;
         }
         return total;
-    }
-
-    @Override
-    public String toString() {
-        return "Salary{" +
-                "martialStatus=" + martialStatus +
-                ", residence=" + residence +
-                ", dependants=" + dependants +
-                ", baseSalary=" + baseSalary +
-                ", foodAllowance=" + foodAllowance +
-                ", foodAllowanceAsCard=" + foodAllowanceAsCard +
-                ", allowances=" + allowances +
-                ", monthlyWorkingDays=" + monthlyWorkingDays +
-                '}';
     }
 }

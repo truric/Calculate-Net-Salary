@@ -1,10 +1,13 @@
 import Salary.model.Salary;
 import Salary.model.martialStatus;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.status.StatusLogger;
 
 import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        StatusLogger.getLogger().setLevel(Level.OFF);
         Salary salary = new Salary();
 
         int ms = salary.martialStatusMenu();
@@ -22,11 +25,11 @@ public class Main {
 
         Double tax = salary.calculateWithholdingTax(getMartialStatusIntInput(ms), dep, bs);
         Double GrossSalary = salary.calculateGrossSalary(bs,fa,cardAnswer, al, mwd);
-        Double NetSalary = GrossSalary - ((tax * 0.01) * GrossSalary);
+        Double NetSalary = GrossSalary - (GrossSalary * tax) - (GrossSalary * 0.11);
 
-        System.out.println("tax: " + tax + "%");
-        System.out.format("Gross salary %.2f", GrossSalary);
-        System.out.format("\nNet salary: %.2f", NetSalary);
+        System.out.println("\nIRS tax: " + tax*100 + "%");
+        System.out.format("Gross salary %.2f \u20AC", GrossSalary);
+        System.out.format("\nNet salary: %.2f \u20AC", NetSalary);
 
     }
 
