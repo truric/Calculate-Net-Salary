@@ -118,10 +118,10 @@ public class Salary {
         return fa;
     }
 
-    public int foodAllowanceCardMenu() {
+    public boolean foodAllowanceCardMenu() {
         Scanner scan = new Scanner(System.in);
         int card = 0;
-        boolean valid;
+        boolean valid, answer = true;
         do {
             valid = true;
             try {
@@ -132,7 +132,10 @@ public class Salary {
                 valid = false;
             }
         } while (card < 1 || card > 2 || !valid);
-        return card;
+        if (card == 1)
+            return answer = true;
+        else
+            return answer = false;
     }
 
     public double allowancesMenu() {
@@ -208,6 +211,8 @@ public class Salary {
             total = baseSalary + (foodAllowance * monthlyWorkingDays) + allowances;
         }else if (foodAllowanceAsCard && foodAllowance > MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD) {
             total = baseSalary + (foodAllowance - MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD) * monthlyWorkingDays + allowances;
+        }else if (foodAllowanceAsCard && foodAllowance < MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD && foodAllowance > MINIMUM_LEGAL_FOOD_ALLOWANCE) {
+            total = baseSalary + (foodAllowance * monthlyWorkingDays) + allowances;
         }else if (!foodAllowanceAsCard && foodAllowance > MINIMUM_LEGAL_FOOD_ALLOWANCE) {
             total = baseSalary + (foodAllowance - MINIMUM_LEGAL_FOOD_ALLOWANCE) * monthlyWorkingDays + allowances;
         }

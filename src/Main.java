@@ -20,17 +20,13 @@ public class Main {
         int dep = salary.dependantsMenu();
         double bs = salary.baseSalaryMenu();
         double fa = salary.foodAllowanceMenu();
-        int card = salary.foodAllowanceCardMenu();
-
-        boolean cardAnswer;
-        // card = 1 ? cardAnswer = true : cardAnswer = false
-        cardAnswer = card == 1;
+        boolean card = salary.foodAllowanceCardMenu();
 
         double al = salary.allowancesMenu();
         int mwd = salary.monthlyWorkingDaysMenu();
 
         Double tax = salary.calculateWithholdingTax(getMartialStatusIntInput(ms), dep, bs);
-        Double GrossSalary = salary.calculateGrossSalary(bs,fa,cardAnswer, al, mwd);
+        Double GrossSalary = salary.calculateGrossSalary(bs, fa, card, al, mwd);
         Double NetSalary = GrossSalary - (GrossSalary * tax) - (GrossSalary * 0.11);
 
         System.out.format("\nIRS tax: %.2f\uFF05", tax*100);
