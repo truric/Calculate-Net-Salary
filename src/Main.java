@@ -1,13 +1,19 @@
 import Salary.model.Salary;
 import Salary.model.martialStatus;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.status.StatusLogger;
+
+//disable DEBUG messages
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class Main {
+
     public static void main(String[] args) throws IOException {
-        StatusLogger.getLogger().setLevel(Level.OFF);
+        Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+        root.setLevel(Level.ERROR);
+
         Salary salary = new Salary();
 
         int ms = salary.martialStatusMenu();
@@ -27,8 +33,8 @@ public class Main {
         Double GrossSalary = salary.calculateGrossSalary(bs,fa,cardAnswer, al, mwd);
         Double NetSalary = GrossSalary - (GrossSalary * tax) - (GrossSalary * 0.11);
 
-        System.out.println("\nIRS tax: " + tax*100 + "%");
-        System.out.format("Gross salary %.2f \u20AC", GrossSalary);
+        System.out.format("\nIRS tax: %.2f\uFF05", tax*100);
+        System.out.format("\nGross salary %.2f \u20AC", GrossSalary);
         System.out.format("\nNet salary: %.2f \u20AC", NetSalary);
 
     }
