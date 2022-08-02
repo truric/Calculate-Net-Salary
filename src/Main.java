@@ -7,32 +7,46 @@ import ch.qos.logback.classic.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Objects;
+import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
+        int continueMenu = 1;
+        Scanner scan = new Scanner(System.in);
+
         Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         root.setLevel(Level.ERROR);
 
-        Salary salary = new Salary();
+        do {
 
-        int ms = salary.martialStatusMenu();
-        int dep = salary.dependantsMenu();
-        double bs = salary.baseSalaryMenu();
-        double fa = salary.foodAllowanceMenu();
-        boolean card = salary.foodAllowanceCardMenu();
+            Salary salary = new Salary();
 
-        double al = salary.allowancesMenu();
-        int mwd = salary.monthlyWorkingDaysMenu();
+            int ms = salary.martialStatusMenu();
+            int dep = salary.dependantsMenu();
+            double bs = salary.baseSalaryMenu();
+            double fa = salary.foodAllowanceMenu();
+            boolean card = salary.foodAllowanceCardMenu();
+            double al = salary.allowancesMenu();
+            int mwd = salary.monthlyWorkingDaysMenu();
 
-        Double tax = salary.calculateWithholdingTax(getMartialStatusIntInput(ms), dep, bs);
-        Double GrossSalary = salary.calculateGrossSalary(bs, fa, card, al, mwd);
-        Double NetSalary = GrossSalary - (GrossSalary * tax) - (GrossSalary * 0.11);
+            double tax = salary.calculateWithholdingTax(getMartialStatusIntInput(ms), dep, bs);
+            double GrossSalary = salary.calculateGrossSalary(bs, fa, card, al, mwd);
+            double NetSalary = GrossSalary - (GrossSalary * tax) - (GrossSalary * 0.11);
 
-        System.out.format("\nIRS tax: %.2f\uFF05", tax*100);
-        System.out.format("\nGross salary %.2f \u20AC", GrossSalary);
-        System.out.format("\nNet salary: %.2f \u20AC", NetSalary);
+            if (!card && fa > MINIMUM_LEGAL_FOOD_ALLOWANCE) {
+                NetSalary += MINIMUM_LEGAL_FOOD_ALLOWANCE * mwd;
+            }
 
+            System.out.format("\nIRS tax: %.2f\uFF05", tax * 100);
+            System.out.format("\nGross salary %.2f \u20AC", GrossSalary);
+            System.out.format("\nNet salary: %.2f \u20AC", NetSalary);
+
+            System.out.print("\n\nContinue?\n[1] -- yes\n[2] -- no\n--> ");
+            continueMenu = Integer.parseInt(scan.next());
+
+        }while (continueMenu != 2);
     }
 
     // receives input integer and outputs Enum martialStatus, so it navigates to the correct sheet index
@@ -58,4 +72,5 @@ public class Main {
         }
         return msResult;
     }
+    public static double MINIMUM_LEGAL_FOOD_ALLOWANCE = 4.77;
 }
