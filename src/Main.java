@@ -37,6 +37,8 @@ public class Main {
 
             if (!card && fa > MINIMUM_LEGAL_FOOD_ALLOWANCE) {
                 NetSalary += MINIMUM_LEGAL_FOOD_ALLOWANCE * mwd;
+            } else if (card && fa > MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD) {
+                NetSalary += MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD * mwd;
             }
 
             System.out.format("\nIRS tax: %.2f\uFF05", tax * 100);
@@ -73,4 +75,5 @@ public class Main {
         return msResult;
     }
     public static double MINIMUM_LEGAL_FOOD_ALLOWANCE = 4.77;
+    public static double MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD = 7.63;
 }
