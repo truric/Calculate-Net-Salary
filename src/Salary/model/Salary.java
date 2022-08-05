@@ -56,7 +56,7 @@ public class Salary {
                         "\n[4] -- Married One is Working and has Deficiency" +
                         "\n[5] -- Married both have Deficiency\n--> "
                 );
-            ms = Integer.parseInt(scan.next());
+                ms = Integer.parseInt(scan.next());
             } catch (Exception e) {
                 System.out.println("Invalid value " + e.getMessage().toLowerCase());
                 valid = false;
@@ -207,13 +207,14 @@ public class Salary {
 
     public Double calculateGrossSalary(Double baseSalary, Double foodAllowance, Boolean foodAllowanceAsCard, Double allowances, Integer monthlyWorkingDays) {
         double total = 0;
-        if (foodAllowance < MINIMUM_LEGAL_FOOD_ALLOWANCE) {
+        if (foodAllowance <= MINIMUM_LEGAL_FOOD_ALLOWANCE) {
             total = baseSalary + (foodAllowance * monthlyWorkingDays) + allowances;
         }else if (foodAllowanceAsCard && foodAllowance > MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD) {
             total = baseSalary + (foodAllowance - MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD) * monthlyWorkingDays + allowances;
-        }else if (foodAllowanceAsCard && foodAllowance < MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD && foodAllowance > MINIMUM_LEGAL_FOOD_ALLOWANCE) {
+        }else if (foodAllowanceAsCard && foodAllowance <= MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD) {
             total = baseSalary + (foodAllowance * monthlyWorkingDays) + allowances;
-        }else if (!foodAllowanceAsCard && foodAllowance > MINIMUM_LEGAL_FOOD_ALLOWANCE) {
+//        }else if (!foodAllowanceAsCard && foodAllowance > MINIMUM_LEGAL_FOOD_ALLOWANCE) {
+        }else {
             total = baseSalary + (foodAllowance - MINIMUM_LEGAL_FOOD_ALLOWANCE) * monthlyWorkingDays + allowances;
         }
         return total;

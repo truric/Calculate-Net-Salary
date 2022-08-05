@@ -33,11 +33,16 @@ public class Main {
 
             double tax = salary.calculateWithholdingTax(getMartialStatusIntInput(ms), dep, bs);
             double GrossSalary = salary.calculateGrossSalary(bs, fa, card, al, mwd);
-            double NetSalary = GrossSalary - (GrossSalary * tax) - (GrossSalary * 0.11);
+            double NetSalary = 0;
+            if (card && fa <= MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD) {
+                NetSalary = GrossSalary - (bs * tax) - (bs * 0.11);
+            }else {
+                NetSalary = GrossSalary - (GrossSalary * tax) - (GrossSalary * 0.11);
+            }
 
             if (!card && fa > MINIMUM_LEGAL_FOOD_ALLOWANCE) {
                 NetSalary += MINIMUM_LEGAL_FOOD_ALLOWANCE * mwd;
-            } else if (card && fa > MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD) {
+            }else if(card && fa > MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD) {
                 NetSalary += MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD * mwd;
             }
 
