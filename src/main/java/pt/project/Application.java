@@ -1,5 +1,7 @@
-import salary.model.Salary;
-import salary.model.MartialStatus;
+package pt.project;
+
+import pt.project.salary.MartialStatus;
+import pt.project.salary.Salary;
 
 import java.util.logging.*;
 import java.util.Scanner;
@@ -43,7 +45,7 @@ public class Application {
 
         if (!card && foodAllowance > Salary.MINIMUM_LEGAL_FOOD_ALLOWANCE) {
             netSalary += Salary.MINIMUM_LEGAL_FOOD_ALLOWANCE * monthlyWorkingDays;
-        } else if (card && foodAllowance >  Salary.MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD) {
+        } else if (card && foodAllowance > Salary.MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD) {
             netSalary += Salary.MAXIMUM_EXEMPTED_FOOD_ALLOWANCE_PAID_IN_CARD * monthlyWorkingDays;
         }
 
@@ -63,9 +65,10 @@ public class Application {
             default -> MartialStatus.SINGLE;
         };
     }
+
     public static final String LOG_CONTINUE_MENU = """
-                        Continue?\s
-                        [1] -- yes
-                        [2] -- no
-                        -->\s""";
+            Continue?\s
+            [1] -- yes
+            [2] -- no
+            -->\s""";
 }

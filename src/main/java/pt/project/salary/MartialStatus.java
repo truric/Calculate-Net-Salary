@@ -1,4 +1,4 @@
-package salary.model;
+package pt.project.salary;
 
 public enum MartialStatus {
     SINGLE, SINGLE_WITH_DEFICIENCY,
